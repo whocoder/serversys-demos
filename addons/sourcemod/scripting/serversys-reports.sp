@@ -50,8 +50,9 @@ void LoadConfig(){
 	KvGetString(kv, "ftp-host", g_Settings_FTPHost, sizeof(g_Settings_FTPHost), "127.0.0.1");
 	KvGetString(kv, "ftp-user", g_Settings_FTPUser, sizeof(g_Settings_FTPUser), "root");
 	KvGetString(kv, "ftp-pass", g_Settings_FTPPass, sizeof(g_Settings_FTPPass), "");
-	KvGetString(kv, "ftp-path", g_Settings_FTPPath, sizeof(g_Settings_FTPPath), "/var/www/servers/demos/");
 	g_Settings_FTPPort = KvGetNum(kv, "ftp-port", 21);
+
+	KvGetString(kv, "ftp-path", g_Settings_FTPPath, sizeof(g_Settings_FTPPath), "/var/www/servers/demos/");
 
 	Sys_KillHandle(kv);
 }
@@ -90,6 +91,7 @@ void StartRecording(){
 
 	g_bRecording = true;
 }
+
 void StopRecording(){
 	if(!Sys_Reports_Recording())
 		SetFailState("[server-sys] reports :: ERROR! Attempting to stop unknown recording!");
