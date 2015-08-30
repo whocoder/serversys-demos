@@ -20,6 +20,11 @@ install:
   - cd build-env
   - wget http://sourcemod.gameconnect.net/files/sourcemod-$SOURCEMOD-linux.tar.gz
   - tar -xzvf sourcemod-$SOURCEMOD-linux.tar.gz
+  - wget https://github.com/whocodes/serversys/archive/master.zip
+  - tar -xvf master.zip
+  - cd addons/sourcemod
+  - wget https://github.com/bcserv/smlib/archive/master.zip
+  - tar -xvf master.zip
   - cd ../
   - find build-env/addons/sourcemod/scripting/ -name "*.sp" -type f -delete
   - cp -rv $SCRIPTING/. build-env/addons/sourcemod/scripting/
