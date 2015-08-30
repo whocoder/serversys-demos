@@ -18,8 +18,6 @@ public Plugin myinfo = {
 }
 
 bool g_bLateLoad;
-bool g_bReady = false;
-
 
 char g_Settings_LocalPath[PLATFORM_MAX_PATH];
 char g_Settings_FTPHost[64];
@@ -78,7 +76,6 @@ public void OnPluginEnd(){
 
 public void OnServerIDLoaded(int ServerID){
 	g_iServerID = ServerID;
-	g_bReady = true;
 }
 
 void StartRecording(){
@@ -110,14 +107,26 @@ void StopRecording(){
 	g_bRecording = false;
 }
 
-TransferUpdated Upload_Update(bool finished, const char[] error, float dltotal, float dlnow, float uptotal, float upnow, any recording){
+TransferUpdated Upload_Update(bool finished, const char[] error, float dltotal,
+	float dlnow, float uptotal, float upnow, any recording){
 	if(strlen(error) > 1){
 		LogError("[server-sys] reports :: Error on FTP upload: %s", error);
 		return;
 	}
 	if(finished == true){
-		PrintToServer("[server-sys] reports :: Finished uploading %d", recording);
+		char query[1024];
+		Format(query, sizeof(query), "INSERT INTO reports_demos (sid, timestamp) VALUES(%d, %d)", g_iServerID, recording);
+
+		Sys_DB_TQuery(Sys_Reports_DemoInsertCB, query, recording, DBPrio_High);
 	}
+}
+
+public void Sys_Reports_DemoInsertCB(Handle owner, Handle hndl, const char[] error, any recording){
+	if(hndl == INVALID_HANDLE){
+		LogError("[serversys] reports :: Error inserting demo to database: %d", recording, error);
+		return;
+	}
+
 }
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
@@ -133,9 +142,6 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 
 public int Native_Reports_Ready(Handle plugin, int numParams){
 	if(g_iServerID == 0)
-		return false;
-
-	if(!g_bReady)
 		return false;
 
 	return true;
