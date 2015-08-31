@@ -97,30 +97,34 @@ void StopRecording(){
 	ServerCommand("tv_stoprecord");
 
 	if(Sys_Reports_Ready()){
-		char temp_path_local[PLATFORM_MAX_PATH];
-		Format(temp_path_local, sizeof(temp_path_local), "%s/%d.dem", g_Settings_LocalPath, g_iRecording);
-
-		char temp_path_remote[PLATFORM_MAX_PATH];
-		Format(temp_path_remote, sizeof(temp_path_remote), "%s/%d/%d.dem", g_Settings_FTPPath, g_iServerID, g_iRecording);
-
-		System2_UploadFTPFile(view_as<TransferUpdated>Upload_Update,
-			temp_path_local,
-			temp_path_remote,
-			g_Settings_FTPHost,
-			g_Settings_FTPUser,
-			g_Settings_FTPPass,
-			g_Settings_FTPPort,
-			g_iRecording);
+		CreateTimer(1.0, FTPUpload_Timer, g_iRecording);
 	}
 	g_bRecording = false;
+	g_iRecording = 0;
 }
 
-public void Upload_Update(bool finished, const char[] error, float dltotal, float dlnow, float uptotal, float upnow, any recording){
+public Action FTPUpload_Timer(Handle timer, any recording){
+	char temp_path_local[PLATFORM_MAX_PATH];
+	Format(temp_path_local, sizeof(temp_path_local), "%s/%d.dem", g_Settings_LocalPath, recording);
+
+	char temp_path_remote[PLATFORM_MAX_PATH];
+	Format(temp_path_remote, sizeof(temp_path_remote), "%s/%d/%d.dem", g_Settings_FTPPath, g_iServerID, recording);
+
+	System2_UploadFTPFile(view_as<TransferUpdated>FTPUpload_Callback,
+		temp_path_local,
+		temp_path_remote,
+		g_Settings_FTPHost,
+		g_Settings_FTPUser,
+		g_Settings_FTPPass,
+		g_Settings_FTPPort,
+		recording);
+}
+
+public void FTPUpload_Callback(bool finished, const char[] error, float dltotal, float dlnow, float uptotal, float upnow, any recording){
 	if(strlen(error) > 1){
 		LogError("[server-sys] reports :: Error on FTP upload: %s", error);
 		return;
-	}
-	if(finished == true){
+	}else if(finished == true){
 		char query[1024];
 		Format(query, sizeof(query), "INSERT INTO reports_demos (sid, timestamp) VALUES(%d, %d)", g_iServerID, recording);
 
@@ -130,7 +134,7 @@ public void Upload_Update(bool finished, const char[] error, float dltotal, floa
 
 public void Sys_Reports_DemoInsertCB(Handle owner, Handle hndl, const char[] error, any recording){
 	if(hndl == INVALID_HANDLE){
-		LogError("[serversys] reports :: Error inserting demo to database: %d", recording, error);
+		LogError("[serversys] reports :: Error inserting demo (%d.dem) to database: %s", recording, error);
 		return;
 	}
 
