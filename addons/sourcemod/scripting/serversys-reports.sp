@@ -4,6 +4,7 @@
 #include <smlib>
 
 #include <serversys>
+#include <serversys-reports>
 #include <system2>
 
 #pragma semicolon 1
@@ -107,8 +108,7 @@ void StopRecording(){
 	g_bRecording = false;
 }
 
-TransferUpdated Upload_Update(bool finished, const char[] error, float dltotal,
-	float dlnow, float uptotal, float upnow, any recording){
+TransferUpdated Upload_Update(bool finished, const char[] error, float dltotal, float dlnow, float uptotal, float upnow, any recording){
 	if(strlen(error) > 1){
 		LogError("[server-sys] reports :: Error on FTP upload: %s", error);
 		return;
@@ -133,7 +133,7 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 {
 	RegPluginLibrary("serversys-reports");
 
-	CreateNative("Sys_Reports_Ready", Native_Reports_Enabled);
+	CreateNative("Sys_Reports_Ready", Native_Reports_Ready);
 	CreateNative("Sys_Reports_Recording", Native_Reports_Recording);
 
 	g_bLateLoad = late;
