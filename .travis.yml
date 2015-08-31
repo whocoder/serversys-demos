@@ -6,6 +6,7 @@ addons:
 
 env:
   global:
+    - THIS="serversys-reports"
     - INCLUDE=addons/sourcemod/scripting/include/
     - SCRIPTING=addons/sourcemod/scripting/
   matrix:
@@ -45,4 +46,4 @@ script:
 
 after_success:
   - cd compiled
-  - find . -type f -exec curl --user $FTPUSER:$FTPPASS --ftp-create-dirs -T {} ftp://$FTPPATH/$SOURCEMOD/{} \;
+  - find . -type f -exec curl --user $FTPUSER:$FTPPASS --ftp-create-dirs -T {} ftp://$FTPPATH/$SOURCEMOD/$THIS/{} \;
