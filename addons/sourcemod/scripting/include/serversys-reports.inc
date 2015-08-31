@@ -34,7 +34,7 @@ public SharedPlugin __pl_serversys_core =
 };
 
 #if defined REQUIRE_PLUGIN
-public __pl_serversys_core_SetNTVOptional(){
+public __pl_serversys_reports_SetNTVOptional(){
     MarkNativeAsOptional("Sys_Reports_Ready");
     MarkNativeAsOptional("Sys_Reports_Recording");
 }
