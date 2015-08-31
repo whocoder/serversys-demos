@@ -121,12 +121,15 @@ public Action FTPUpload_Timer(Handle timer, any recording){
 }
 
 public void FTPUpload_Callback(bool finished, const char[] error, float dltotal, float dlnow, float uptotal, float upnow, any recording){
-	if(strlen(error) > 1){
-		LogError("[server-sys] reports :: Error on FTP upload: %s", error);
-		return;
-	}else if(finished == true){
+	// System2 spams random errors, unknown
+	//if(strlen(error) > 1){
+	//	LogError("[server-sys] reports :: Error on FTP upload: %s", error);
+	//	return;
+	//}else
+	
+	if(finished == true){
 		char query[1024];
-		Format(query, sizeof(query), "INSERT INTO reports_demos (sid, timestamp) VALUES(%d, %d)", g_iServerID, recording);
+		Format(query, sizeof(query), "INSERT INTO reports_demos (sid, timestamp) VALUES(%d, %d);", g_iServerID, recording);
 
 		Sys_DB_TQuery(Sys_Reports_DemoInsertCB, query, recording, DBPrio_High);
 	}

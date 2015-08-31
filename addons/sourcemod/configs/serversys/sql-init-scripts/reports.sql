@@ -1,0 +1,41 @@
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+CREATE TABLE IF NOT EXISTS `reports_demos` (
+  `demoid` int(11) NOT NULL,
+  `sid` int(11) NOT NULL,
+  `timestamp` bigint(20) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `reports_demos`
+  ADD PRIMARY KEY (`demoid`);
+
+ALTER TABLE `reports_demos`
+  MODIFY `demoid` int(11) NOT NULL AUTO_INCREMENT;
+
+  
+CREATE TABLE IF NOT EXISTS `reports` (
+  `reportid` int(11) NOT NULL,
+  `reporter` int(11) NOT NULL,
+  `reportee` int(11) NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `demo` bigint(20) NOT NULL,
+  `timestamp` bigint(20) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `reports`
+  ADD PRIMARY KEY (`reportid`);
+
+ALTER TABLE `reports`
+  MODIFY `reportid` int(11) NOT NULL AUTO_INCREMENT;
+  
+  
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
