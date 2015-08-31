@@ -108,7 +108,7 @@ void StopRecording(){
 	g_bRecording = false;
 }
 
-public TransferUpdated Upload_Update(bool finished, const char[] error, float dltotal, float dlnow, float uptotal, float upnow, any recording){
+public void Upload_Update(bool finished, const char[] error, float dltotal, float dlnow, float uptotal, float upnow, any recording){
 	if(strlen(error) > 1){
 		LogError("[server-sys] reports :: Error on FTP upload: %s", error);
 		return;
