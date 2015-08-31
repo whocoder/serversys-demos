@@ -103,7 +103,14 @@ void StopRecording(){
 		char temp_path_remote[PLATFORM_MAX_PATH];
 		Format(temp_path_remote, sizeof(temp_path_remote), "%s/%d/%d.dem", g_Settings_FTPPath, g_iServerID, g_iRecording);
 
-		System2_UploadFTPFile(Upload_Update, temp_path_local, temp_path_remote, g_Settings_FTPHost, g_Settings_FTPUser, g_Settings_FTPPass, g_Settings_FTPPort, g_iRecording);
+		System2_UploadFTPFile(Upload_Update,
+			temp_path_local,
+			temp_path_remote,
+			g_Settings_FTPHost,
+			g_Settings_FTPUser,
+			g_Settings_FTPPass,
+			g_Settings_FTPPort,
+			g_iRecording);
 	}
 	g_bRecording = false;
 }
