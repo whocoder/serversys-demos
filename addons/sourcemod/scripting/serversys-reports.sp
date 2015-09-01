@@ -136,11 +136,11 @@ public void FTPUpload_Callback(bool finished, const char[] error, float dltotal,
 
 	if(finished == true){
 		int recording = data.ReadCell();
-		int finished = data.ReadCell();
+		int finish = data.ReadCell();
 		data.Position = data.Position - 2;
 
 		char query[1024];
-		Format(query, sizeof(query), "INSERT INTO reports_demos (sid, timestamp, timestamp_end, integrity) VALUES(%d, %d, %d, %.2f);", g_iServerID, recording, finished, ((upnow / uptotal)*100.0));
+		Format(query, sizeof(query), "INSERT INTO reports_demos (sid, timestamp, timestamp_end, integrity) VALUES(%d, %d, %d, %.2f);", g_iServerID, recording, finish, ((upnow / uptotal)*100.0));
 
 
 		Sys_DB_TQuery(Sys_Reports_DemoInsertCB, query, data, DBPrio_High);
