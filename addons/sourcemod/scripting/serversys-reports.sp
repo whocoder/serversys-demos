@@ -98,8 +98,8 @@ void StopRecording(){
 
 	if(Sys_Reports_Ready()){
 		DataPack pack = new DataPack();
-		pack.WriteFloat(g_iRecording);
-		pack.WriteFloat(GetTime());
+		pack.WriteCell(g_iRecording);
+		pack.WriteCell(GetTime());
 		CreateTimer(1.0, FTPUpload_Timer, pack);
 	}
 	g_bRecording = false;
@@ -107,7 +107,7 @@ void StopRecording(){
 }
 
 public Action FTPUpload_Timer(Handle timer, any data){
-	float recording = data.ReadFloat();
+	int recording = data.ReadCell();
 	data.Position = data.Position - 1;
 
 	char temp_path_local[PLATFORM_MAX_PATH];
@@ -135,8 +135,8 @@ public void FTPUpload_Callback(bool finished, const char[] error, float dltotal,
 
 
 	if(finished == true){
-		float recording = data.ReadFloat();
-		float finished = data.ReadFloat();
+		int recording = data.ReadCell();
+		int finished = data.ReadCell();
 		data.Position = data.Position - 2;
 
 		char query[1024];
@@ -148,8 +148,8 @@ public void FTPUpload_Callback(bool finished, const char[] error, float dltotal,
 }
 
 public void Sys_Reports_DemoInsertCB(Handle owner, Handle hndl, const char[] error, any data){
-	float recording = data.ReadFloat();
-	float finished = data.ReadFloat();
+	int recording = data.ReadCell();
+	int finished = data.ReadCell();
 	CloseHandle(data);
 
 	if(hndl == INVALID_HANDLE){
