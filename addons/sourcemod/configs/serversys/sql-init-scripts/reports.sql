@@ -10,7 +10,9 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `reports_demos` (
   `demoid` int(11) NOT NULL,
   `sid` int(11) NOT NULL,
-  `timestamp` bigint(20) NOT NULL
+  `timestamp` bigint(20) NOT NULL,
+  `timestamp_end` bigint(20) NOT NULL,
+  `integrity` DECIMAL(4,2) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `reports_demos`
@@ -19,7 +21,7 @@ ALTER TABLE `reports_demos`
 ALTER TABLE `reports_demos`
   MODIFY `demoid` int(11) NOT NULL AUTO_INCREMENT;
 
-  
+
 CREATE TABLE IF NOT EXISTS `reports` (
   `reportid` int(11) NOT NULL,
   `reporter` int(11) NOT NULL,
@@ -34,8 +36,8 @@ ALTER TABLE `reports`
 
 ALTER TABLE `reports`
   MODIFY `reportid` int(11) NOT NULL AUTO_INCREMENT;
-  
-  
+
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

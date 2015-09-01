@@ -97,13 +97,19 @@ void StopRecording(){
 	ServerCommand("tv_stoprecord");
 
 	if(Sys_Reports_Ready()){
-		CreateTimer(1.0, FTPUpload_Timer, g_iRecording);
+		DataPack pack = new DataPack();
+		pack.WriteFloat(g_iRecording);
+		pack.WriteFloat(GetTime());
+		CreateTimer(1.0, FTPUpload_Timer, pack);
 	}
 	g_bRecording = false;
 	g_iRecording = 0;
 }
 
-public Action FTPUpload_Timer(Handle timer, any recording){
+public Action FTPUpload_Timer(Handle timer, any data){
+	float recording = data.ReadFloat();
+	data.Position = data.Position - 1;
+
 	char temp_path_local[PLATFORM_MAX_PATH];
 	Format(temp_path_local, sizeof(temp_path_local), "%s/%d.dem", g_Settings_LocalPath, recording);
 
@@ -117,30 +123,41 @@ public Action FTPUpload_Timer(Handle timer, any recording){
 		g_Settings_FTPUser,
 		g_Settings_FTPPass,
 		g_Settings_FTPPort,
-		recording);
+		data);
 }
 
-public void FTPUpload_Callback(bool finished, const char[] error, float dltotal, float dlnow, float uptotal, float upnow, any recording){
+public void FTPUpload_Callback(bool finished, const char[] error, float dltotal, float dlnow, float uptotal, float upnow, any data){
 	// System2 spams random errors, unknown
 	//if(strlen(error) > 1){
 	//	LogError("[server-sys] reports :: Error on FTP upload: %s", error);
 	//	return;
 	//}else
-	
-	if(finished == true){
-		char query[1024];
-		Format(query, sizeof(query), "INSERT INTO reports_demos (sid, timestamp) VALUES(%d, %d);", g_iServerID, recording);
 
-		Sys_DB_TQuery(Sys_Reports_DemoInsertCB, query, recording, DBPrio_High);
+
+	if(finished == true){
+		float recording = data.ReadFloat();
+		float finished = data.ReadFloat();
+		data.Position = data.Position - 2;
+
+		char query[1024];
+		Format(query, sizeof(query), "INSERT INTO reports_demos (sid, timestamp, timestamp_end, integrity) VALUES(%d, %d, %d, %.2f);", g_iServerID, recording, finished, ((upnow / uptotal)*100.0));
+
+
+		Sys_DB_TQuery(Sys_Reports_DemoInsertCB, query, data, DBPrio_High);
 	}
 }
 
-public void Sys_Reports_DemoInsertCB(Handle owner, Handle hndl, const char[] error, any recording){
+public void Sys_Reports_DemoInsertCB(Handle owner, Handle hndl, const char[] error, any data){
+	float recording = data.ReadFloat();
+	float finished = data.ReadFloat();
+	CloseHandle(data);
+
 	if(hndl == INVALID_HANDLE){
-		LogError("[serversys] reports :: Error inserting demo (%d.dem) to database: %s", recording, error);
+		LogError("[serversys] reports :: Error inserting demo (%d.dem, finished on %d) to database: %s", recording, finished, error);
 		return;
 	}
 
+	PrintToServer("[serversys] reports :: Demo uploading complete and inserted into table. %d to %d (%d.dem)", recording, finished, recording);
 }
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
