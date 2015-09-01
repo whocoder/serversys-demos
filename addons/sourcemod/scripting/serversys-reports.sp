@@ -106,7 +106,7 @@ void StopRecording(){
 	g_iRecording = 0;
 }
 
-public Action FTPUpload_Timer(Handle timer, any data){
+public Action FTPUpload_Timer(Handle timer, DataPack data){
 	int recording = data.ReadCell();
 	data.Position = data.Position - 1;
 
@@ -126,7 +126,7 @@ public Action FTPUpload_Timer(Handle timer, any data){
 		data);
 }
 
-public void FTPUpload_Callback(bool finished, const char[] error, float dltotal, float dlnow, float uptotal, float upnow, any data){
+public void FTPUpload_Callback(bool finished, const char[] error, float dltotal, float dlnow, float uptotal, float upnow, DataPack data){
 	// System2 spams random errors, unknown
 	//if(strlen(error) > 1){
 	//	LogError("[server-sys] reports :: Error on FTP upload: %s", error);
@@ -147,7 +147,7 @@ public void FTPUpload_Callback(bool finished, const char[] error, float dltotal,
 	}
 }
 
-public void Sys_Reports_DemoInsertCB(Handle owner, Handle hndl, const char[] error, any data){
+public void Sys_Reports_DemoInsertCB(Handle owner, Handle hndl, const char[] error, DataPack data){
 	int recording = data.ReadCell();
 	int finished = data.ReadCell();
 	CloseHandle(data);
