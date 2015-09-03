@@ -166,10 +166,17 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 
 	CreateNative("Sys_Reports_Ready", Native_Reports_Ready);
 	CreateNative("Sys_Reports_Recording", Native_Reports_Recording);
+	CreateNative("Sys_Reports_GetRecording", Native_Reports_GetRecording);
 
 	g_bLateLoad = late;
 }
 
+public int Native_Reports_GetRecording(Handle plugin, int numParams){
+	if(Sys_Reports_Recording() && g_iRecording != 0)
+		return g_iRecording;
+	
+	return 0;
+}
 
 public int Native_Reports_Ready(Handle plugin, int numParams){
 	if(g_iServerID == 0)
