@@ -1,8 +1,13 @@
 "Phrases"
 {
-	"Report a player"
+	"Report Menu Header"
 	{
-		"en"		"Report a player"
+		"en"		"-------------\nPlease be sure there is a\nlegitimate reason first.\nThen, carefully select the player\nthat you wish to report.\n-------------"
+	}
+
+	"No Players"
+	{
+		"en"		"There are no players to report!"
 	}
 
 	"Type report reason"
