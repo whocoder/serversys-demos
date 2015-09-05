@@ -43,7 +43,7 @@ void LoadConfig(){
 		SetFailState("[serversys] reports :: Cannot read from configuration file: %s", Config_Path);
 	}
 
-	KvGetString(kv, "report-command", g_Settings_cCommandString, sizeof(g_Settings_cCommandString), "!report /report");
+	KvGetString(kv, "report-command", g_Settings_CommandString, sizeof(g_Settings_CommandString), "!report /report");
 
 	char local_path[128];
 	KvGetString(kv, "local-path", local_path, sizeof(local_path), "data");
