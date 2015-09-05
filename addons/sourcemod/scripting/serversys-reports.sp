@@ -178,23 +178,27 @@ public void Sys_Reports_DemoInsertCB(Handle owner, Handle hndl, const char[] err
 }
 
 public void Command_ReportPlayer(int client, const char[] command, const char[] args){
-	Menu menu = new Menu(MenuHandler_ReportPlayer);
-	menu.SetTitle("%t", "Report Menu Header");
-	menu.ExitButton = true;
-	char tauth[32];
-	char tname[32];
-	for(int i = 1; i <= MaxClients; i++){
-		if(IsClientConnected(i) && (i != client) && !IsFakeClient(i) && !IsClientSourceTV(i)){
-			Format(tauth, sizeof(tauth), "%d", Sys_GetPlayerID(i));
-			Format(tname, sizeof(tname), "%N", i);
-			menu.AddItem(tauth, tname);
+	if(Sys_PlayerCount(_, true) > 1){
+		Menu menu = new Menu(MenuHandler_ReportPlayer);
+		menu.SetTitle("%t", "Report Menu Header");
+		menu.ExitButton = true;
+		char tauth[32];
+		char tname[32];
+		for(int i = 1; i <= MaxClients; i++){
+			if(IsClientConnected(i) && (i != client) && !IsFakeClient(i) && !IsClientSourceTV(i)){
+				Format(tauth, sizeof(tauth), "%d", Sys_GetPlayerID(i));
+				Format(tname, sizeof(tname), "%N", i);
+				menu.AddItem(tauth, tname);
+			}
 		}
+		menu.Display(client, 30);
+	}else{
+		PrintToChat(client, "%t", "No Players");
 	}
-	menu.Display(client, 30);
 }
 
 public int MenuHandler_ReportPlayer(Menu menu, MenuAction action, int client, int itemidx){
-	if(client == 0 || !IsClientConnected(client)){
+	if(client <= 0 || !IsClientConnected(client)){
 		#if defined DEBUG
 		PrintToServer("[server-sys] reports :: Weird error in report menu.");
 		#endif
