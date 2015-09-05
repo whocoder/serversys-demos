@@ -190,6 +190,7 @@ public void Command_ReportPlayer(int client, const char[] command, const char[] 
 			menu.AddItem(tauth, tname);
 		}
 	}
+	menu.Display(client, 30);
 }
 
 public int MenuHandler_ReportPlayer(Menu menu, MenuAction action, int client, int itemidx){
