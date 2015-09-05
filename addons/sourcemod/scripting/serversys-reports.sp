@@ -179,12 +179,12 @@ public void Sys_Reports_DemoInsertCB(Handle owner, Handle hndl, const char[] err
 
 public void Command_ReportPlayer(int client, const char[] command, const char[] args){
 	Menu menu = new Menu(MenuHandler_ReportPlayer);
-	menu.SetTitle("%t", "Report a player");
+	menu.SetTitle("%t", "Report Menu Header");
 	menu.ExitButton = true;
 	char tauth[32];
 	char tname[32];
 	for(int i = 1; i <= MaxClients; i++){
-		if(IsClientConnected(i) && (i != client)){
+		if(IsClientConnected(i) && (i != client) && !IsFakeClient(i) && !IsClientSourceTV(i)){
 			Format(tauth, sizeof(tauth), "%d", Sys_GetPlayerID(i));
 			Format(tname, sizeof(tname), "%N", i);
 			menu.AddItem(tauth, tname);
