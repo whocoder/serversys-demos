@@ -1,0 +1,18 @@
+"Phrases"
+{
+	"Report a player"
+	{
+		"en"		"Report a player"
+	}
+
+	"Type report reason"
+	{
+		"en"		"Type the reason for your report in chat. Minimum 15 characters."
+	}
+
+	"Type report reason reportee"
+	{
+		"#format"	"{1:s}"
+		"en"		"Type the reason for your report against {1} in chat. Minimum 15 characters."
+	}
+}

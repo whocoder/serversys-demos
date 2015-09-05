@@ -26,6 +26,7 @@ char g_Settings_FTPPass[64];
 char g_Settings_FTPUser[64];
 char g_Settings_FTPPath[64];
 int  g_Settings_FTPPort;
+char g_Settings_CommandString[128];
 
 
 int  g_iServerID = 0;
@@ -41,6 +42,8 @@ void LoadConfig(){
 		Sys_KillHandle(kv);
 		SetFailState("[serversys] reports :: Cannot read from configuration file: %s", Config_Path);
 	}
+
+	KvGetString(kv, "report-command", g_Settings_cCommandString, sizeof(g_Settings_cCommandString), "!report /report");
 
 	char local_path[128];
 	KvGetString(kv, "local-path", local_path, sizeof(local_path), "data");
@@ -59,8 +62,14 @@ void LoadConfig(){
 public void OnPluginStart(){
 	LoadConfig();
 
-	if(g_bLateLoad)
+	LoadTranslations("serversys.reports.phrases");
+
+	if(g_bLateLoad && Sys_InMap())
 		StartRecording();
+}
+
+public void OnAllPluginsLoaded(){
+	Sys_RegisterChatCommand(g_Settings_CommandString, Command_ReportPlayer);
 }
 
 public void OnMapStart(){
@@ -160,6 +169,51 @@ public void Sys_Reports_DemoInsertCB(Handle owner, Handle hndl, const char[] err
 	PrintToServer("[serversys] reports :: Demo uploading complete and inserted into table. %d to %d (%d.dem)", recording, finished, recording);
 }
 
+public Action Command_ReportPlayer(int client, const char[] command, const char[] args){
+	Menu menu = new Menu(MenuHandler_ReportPlayer);
+	menu.SetTitle("%t", "Report a player");
+	menu.ExitButton = true;
+	char tauth[32];
+	char tname[32];
+	for(int i = 1; i <= MaxClients; i++){
+		if(IsClientConnected(i) && (i != client)){
+			Format(tauth, sizeof(tauth), "%d", Sys_GetPlayerID(i));
+			Format(tname, sizeof(tname), "%N", i);
+			menu.AddItem(tauth, tname);
+		}
+	}
+
+	return Plugin_Handled;
+}
+
+public int MenuHandler_ReportPlayer(Menu menu, MenuAction action, int client, int itemidx){
+	if(client == 0 || !IsClientConnected(client)){
+		#if defined DEBUG
+		PrintToServer("[server-sys] reports :: Weird error in report menu.");
+		#endif
+		return;
+	}
+
+	if(action == MenuAction_Select){
+		char info[32];
+		menu.GetItem(itemidx, info, sizeof(info));
+
+		int playerid = StringToInt(info);
+		int reportee = Sys_GetClientOfPlayerID(playerid);
+
+		g_bListening[client] = true;
+		g_iListeningTarget[client] = playerid;
+
+		if(reportee != 0){
+			char name[32];
+			GetClientName(reportee, name, sizeof(name));
+			PrintToChat(client, "%t", "Type report reason reportee", name);
+		}else{
+			PrintToChat(client, "%t", "Type report reason");
+		}
+	}
+}
+
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
 {
 	RegPluginLibrary("serversys-reports");
@@ -174,7 +228,7 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 public int Native_Reports_GetRecording(Handle plugin, int numParams){
 	if(Sys_Reports_Recording() && g_iRecording != 0)
 		return g_iRecording;
-	
+
 	return 0;
 }
 
