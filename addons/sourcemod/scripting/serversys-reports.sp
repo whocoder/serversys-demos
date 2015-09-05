@@ -33,6 +33,9 @@ int  g_iServerID = 0;
 bool g_bRecording;
 int  g_iRecording;
 
+bool g_bListening[MAXPLAYERS + 1];
+int  g_iListeningTarget[MAXPLAYERS + 1];
+
 void LoadConfig(){
 	Handle kv = CreateKeyValues("Reports");
 	char Config_Path[PLATFORM_MAX_PATH];
@@ -86,6 +89,11 @@ public void OnPluginEnd(){
 
 public void OnServerIDLoaded(int ServerID){
 	g_iServerID = ServerID;
+}
+
+public void OnClientPutInServer(int client){
+	g_bListening[client] = false;
+	g_iListeningTarget[client] = 0;
 }
 
 void StartRecording(){
@@ -169,7 +177,7 @@ public void Sys_Reports_DemoInsertCB(Handle owner, Handle hndl, const char[] err
 	PrintToServer("[serversys] reports :: Demo uploading complete and inserted into table. %d to %d (%d.dem)", recording, finished, recording);
 }
 
-public Action Command_ReportPlayer(int client, const char[] command, const char[] args){
+public Sys_ChatCommand_CB Command_ReportPlayer(int client, const char[] command, const char[] args){
 	Menu menu = new Menu(MenuHandler_ReportPlayer);
 	menu.SetTitle("%t", "Report a player");
 	menu.ExitButton = true;
