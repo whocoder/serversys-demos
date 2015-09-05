@@ -177,7 +177,7 @@ public void Sys_Reports_DemoInsertCB(Handle owner, Handle hndl, const char[] err
 	PrintToServer("[serversys] reports :: Demo uploading complete and inserted into table. %d to %d (%d.dem)", recording, finished, recording);
 }
 
-public Sys_ChatCommand_CB Command_ReportPlayer(int client, const char[] command, const char[] args){
+public void Command_ReportPlayer(int client, const char[] command, const char[] args){
 	Menu menu = new Menu(MenuHandler_ReportPlayer);
 	menu.SetTitle("%t", "Report a player");
 	menu.ExitButton = true;
@@ -190,8 +190,6 @@ public Sys_ChatCommand_CB Command_ReportPlayer(int client, const char[] command,
 			menu.AddItem(tauth, tname);
 		}
 	}
-
-	return Plugin_Handled;
 }
 
 public int MenuHandler_ReportPlayer(Menu menu, MenuAction action, int client, int itemidx){
