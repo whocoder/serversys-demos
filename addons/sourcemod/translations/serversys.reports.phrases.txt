@@ -10,14 +10,20 @@
 		"en"		"There are no players to report!"
 	}
 
-	"Type report reason"
+	"Type Reason"
 	{
 		"en"		"Type the reason for your report in chat. Minimum 15 characters."
 	}
 
-	"Type report reason reportee"
+	"Type Reason Against"
 	{
 		"#format"	"{1:s}"
 		"en"		"Type the reason for your report against {1} in chat. Minimum 15 characters."
+	}
+
+	"Report Success"
+	{
+		"#format"	"{1:i}"
+		"en"		"Your report has been successfully submitted. Your report ID is {1}."
 	}
 }

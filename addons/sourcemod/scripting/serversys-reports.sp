@@ -35,6 +35,7 @@ int  g_iRecording;
 
 bool g_bListening[MAXPLAYERS + 1];
 int  g_iListeningTarget[MAXPLAYERS + 1];
+int  g_iListeningTime[MAXPLAYERS + 1];
 
 void LoadConfig(){
 	Handle kv = CreateKeyValues("Reports");
@@ -77,6 +78,14 @@ public void OnAllPluginsLoaded(){
 
 public void OnMapStart(){
 	StartRecording();
+
+	for(int i = 1; i <= MaxClients; i++){
+		if(IsClientConnected(i) && !IsFakeClient(i) && !IsClientSourceTV(i)){
+			g_bListening[i] = false;
+			g_iListeningTarget[i] = 0;
+			g_iListeningTime[i] = 0;
+		}
+	}
 }
 
 public void OnMapEnd(){
@@ -94,6 +103,7 @@ public void OnServerIDLoaded(int ServerID){
 public void OnClientPutInServer(int client){
 	g_bListening[client] = false;
 	g_iListeningTarget[client] = 0;
+	g_iListeningTime[client] = 0;
 }
 
 void StartRecording(){
@@ -212,17 +222,50 @@ public int MenuHandler_ReportPlayer(Menu menu, MenuAction action, int client, in
 		int playerid = StringToInt(info);
 		int reportee = Sys_GetClientOfPlayerID(playerid);
 
-		g_bListening[client] = true;
-		g_iListeningTarget[client] = playerid;
+		if(playerid > 0){
+			g_bListening[client] = true;
+			g_iListeningTarget[client] = playerid;
+			g_iListeningTime[client] = GetTime();
 
-		if(reportee != 0){
-			char name[32];
-			GetClientName(reportee, name, sizeof(name));
-			PrintToChat(client, "%t", "Type report reason reportee", name);
-		}else{
-			PrintToChat(client, "%t", "Type report reason");
+			if(reportee != 0){
+				char name[32];
+				GetClientName(reportee, name, sizeof(name));
+				PrintToChat(client, "%t", "Type Reason Against", name);
+			}else{
+				PrintToChat(client, "%t", "Type Reason");
+			}
 		}
 	}
+}
+
+public Action OnClientSayCommand(int client, const char[] command, const char[] args){
+	if(client != 0 && g_bListening[client] && (g_iListeningTarget[client] > 0)){
+		int dlen = 256;
+		int safelen = 2*dlen+1;
+		char[] desc = new char[dlen];
+		char[] safedesc = new char[safelen];
+		strcopy(desc, sizeof(desc), args);
+
+		Sys_DB_EscapeString(desc, sizeof(desc), safedesc, sizeof(safedesc));
+
+		char query[1024];
+		Format(query, sizeof(query), "INSERT INTO reports (reporter, reportee, description, demo, timestamp) VALUES(%d, %d, '%s', %d, %d);",
+			Sys_GetPlayerID(client),
+			g_iListeningTarget[client],
+			safedesc,
+			g_iRecording,
+			g_iListeningTime[client]);
+		Sys_DB_TQuery(Sys_Reports_ReportInsertCB, query, client);
+	}
+}
+
+public void Sys_Reports_ReportInsertCB(Handle owner, Handle hndl, const char[] error, int client){
+	if(hndl == INVALID_HANDLE){
+		LogError("[serversys] reports :: Error inserting report from %N: %s", client, error);
+		return;
+	}
+
+	PrintToChat(client, "%t", "Report Success", SQL_GetInsertId(hndl));
 }
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
