@@ -246,7 +246,7 @@ public Action OnClientSayCommand(int client, const char[] command, const char[] 
 		char[] safedesc = new char[safelen];
 		strcopy(desc, sizeof(desc), args);
 
-		Sys_DB_EscapeString(args, MAX_MESSAGE_LENGTH, safedesc, safelen);
+		Sys_DB_EscapeString(desc, sizeof(desc), safedesc, safelen);
 
 		char query[1024];
 		Format(query, sizeof(query), "INSERT INTO reports (reporter, reportee, description, demo, timestamp) VALUES(%d, %d, '%s', %d, %d);",
