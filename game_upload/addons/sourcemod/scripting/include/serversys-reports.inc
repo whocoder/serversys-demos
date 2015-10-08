@@ -40,3 +40,11 @@ public __pl_serversys_reports_SetNTVOptional(){
     MarkNativeAsOptional("Sys_Reports_GetRecording");
 }
 #endif
+
+
+/* This stays at the bottom
+*/
+#if defined MAX_MESSAGE_LENGTH
+  #endinput
+#endif
+#define MAX_MESSAGE_LENGTH 256
