@@ -240,8 +240,11 @@ public int MenuHandler_ReportPlayer(Menu menu, MenuAction action, int client, in
 
 public Action OnClientSayCommand(int client, const char[] command, const char[] args){
 	if(client != 0 && g_bListening[client] && (g_iListeningTarget[client] > 0)){
+		// string magik
+		char desc[MAX_MESSAGE_LENGTH];
 		int safelen = (2*(MAX_MESSAGE_LENGTH)+1);
 		char[] safedesc = new char[safelen];
+		strcopy(desc, sizeof(desc), args);
 
 		Sys_DB_EscapeString(args, MAX_MESSAGE_LENGTH, safedesc, safelen);
 
