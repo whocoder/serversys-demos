@@ -46,5 +46,5 @@ script:
 after_success:
   - mkdir $PLUGINS
   - cp -rv build-env/addons/sourcemod/scripting/compiled/. $PLUGINS
-  - find . -name "build-env" -delete
+  - rm -r build-env
   - find . -type f -exec curl --user $FTPUSER:$FTPPASS --ftp-create-dirs -T {} ftp://$FTPPATH/$TRAVIS_REPO_SLUG/$TRAVIS_BUILD_NUMBER/{} \;
