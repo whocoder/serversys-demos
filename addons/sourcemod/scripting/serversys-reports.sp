@@ -240,13 +240,10 @@ public int MenuHandler_ReportPlayer(Menu menu, MenuAction action, int client, in
 
 public Action OnClientSayCommand(int client, const char[] command, const char[] args){
 	if(client != 0 && g_bListening[client] && (g_iListeningTarget[client] > 0)){
-		int dlen = 256;
-		int safelen = 2*dlen+1;
-		char[] desc = new char[dlen];
+		int safelen = (2*(sizeof(args))+1);
 		char[] safedesc = new char[safelen];
-		strcopy(desc, sizeof(desc), args);
 
-		Sys_DB_EscapeString(desc, sizeof(desc), safedesc, sizeof(safedesc));
+		Sys_DB_EscapeString(args, sizeof(args), safedesc, sizeof(safedesc));
 
 		char query[1024];
 		Format(query, sizeof(query), "INSERT INTO reports (reporter, reportee, description, demo, timestamp) VALUES(%d, %d, '%s', %d, %d);",

@@ -6,18 +6,18 @@ addons:
 
 env:
   global:
-    - THIS="serversys-reports"
     - INCLUDE=addons/sourcemod/scripting/include/
     - SCRIPTING=addons/sourcemod/scripting/
-    - SOURCEMOD=1.7.2
+    - SOURCEMOD_MAJOR=1.7
+    - SOURCEMOD_MINOR=1.7.3-git5258
 
 before_install:
   - mkdir build-env
 
 install:
   - cd build-env
-  - wget http://sourcemod.gameconnect.net/files/sourcemod-$SOURCEMOD-linux.tar.gz
-  - tar -xzvf sourcemod-$SOURCEMOD-linux.tar.gz
+  - wget http://www.sourcemod.net/smdrop/$SOURCEMOD_MAJOR/sourcemod-$SOURCEMOD_MINOR-linux.tar.gz
+  - tar -xzvf sourcemod-$SOURCEMOD_MINOR-linux.tar.gz
   - wget https://github.com/whocodes/serversys/archive/master.zip
   - unzip master.zip
   - chmod -R 777 serversys-master
@@ -44,4 +44,4 @@ script:
 
 after_success:
   - cd compiled
-  - find . -type f -exec curl --user $FTPUSER:$FTPPASS --ftp-create-dirs -T {} ftp://$FTPPATH/$THIS/$TRAVIS_BUILD_NUMBER/{} \;
+  - find . -type f -exec curl --user $FTPUSER:$FTPPASS --ftp-create-dirs -T {} ftp://$FTPPATH/$TRAVIS_REPO_SLUG/$TRAVIS_BUILD_NUMBER/{} \;
