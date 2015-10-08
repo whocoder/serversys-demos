@@ -143,7 +143,7 @@ public Action FTPUpload_Timer(Handle timer, DataPack data){
 	char temp_path_remote[PLATFORM_MAX_PATH];
 	Format(temp_path_remote, sizeof(temp_path_remote), "%s/%d/%d.dem", g_Settings_FTPPath, g_iServerID, recording);
 
-	System2_UploadFTPFile(view_as<TransferUpdated>FTPUpload_Callback,
+	System2_UploadFTPFile(view_as<TransferUpdated>(FTPUpload_Callback),
 		temp_path_local,
 		temp_path_remote,
 		g_Settings_FTPHost,
@@ -240,10 +240,10 @@ public int MenuHandler_ReportPlayer(Menu menu, MenuAction action, int client, in
 
 public Action OnClientSayCommand(int client, const char[] command, const char[] args){
 	if(client != 0 && g_bListening[client] && (g_iListeningTarget[client] > 0)){
-		int safelen = (2*(sizeof(args))+1);
+		int safelen = (2*(MAX_MESSAGE_LENGTH)+1);
 		char[] safedesc = new char[safelen];
 
-		Sys_DB_EscapeString(args, sizeof(args), safedesc, sizeof(safedesc));
+		Sys_DB_EscapeString(args, MAX_MESSAGE_LENGTH, safedesc, sizeof(safedesc));
 
 		char query[1024];
 		Format(query, sizeof(query), "INSERT INTO reports (reporter, reportee, description, demo, timestamp) VALUES(%d, %d, '%s', %d, %d);",
