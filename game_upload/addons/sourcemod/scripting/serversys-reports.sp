@@ -275,6 +275,8 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 	CreateNative("Sys_Reports_Ready", Native_Reports_Ready);
 	CreateNative("Sys_Reports_Recording", Native_Reports_Recording);
 	CreateNative("Sys_Reports_GetRecording", Native_Reports_GetRecording);
+	CreateNative("Sys_Reports_GetRecordingID", Native_Reports_GetRecording);
+
 
 	g_bLateLoad = late;
 }

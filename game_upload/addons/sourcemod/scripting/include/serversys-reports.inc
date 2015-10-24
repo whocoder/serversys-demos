@@ -21,6 +21,20 @@ native bool Sys_Reports_Ready();
 */
 native bool Sys_Reports_Recording();
 
+/**
+* Checks the current recording ID.
+*
+* @return               Current recording ID or 0.
+*/
+native int Sys_Reports_GetRecording();
+
+/**
+* Checks the current recording ID.
+*
+* @return               Current recording ID or 0.
+*/
+native int Sys_Reports_GetRecordingID();
+
 
 public SharedPlugin __pl_serversys_core =
 {
@@ -38,6 +52,7 @@ public __pl_serversys_reports_SetNTVOptional(){
     MarkNativeAsOptional("Sys_Reports_Ready");
     MarkNativeAsOptional("Sys_Reports_Recording");
     MarkNativeAsOptional("Sys_Reports_GetRecording");
+    MarkNativeAsOptional("Sys_Reports_GetRecordingID");
 }
 #endif
 
