@@ -1,25 +1,18 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-
-CREATE TABLE IF NOT EXISTS `reports_demos` (
-  `demoid` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `demos` (
+  `id` int(11) NOT NULL,
   `sid` int(11) NOT NULL,
   `timestamp` bigint(20) NOT NULL,
   `timestamp_end` bigint(20) NOT NULL,
   `integrity` DECIMAL(4,2) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-ALTER TABLE `reports_demos`
-  ADD PRIMARY KEY (`demoid`);
+ALTER TABLE `demos`
+  ADD PRIMARY KEY (`id`);
 
-ALTER TABLE `reports_demos`
-  MODIFY `demoid` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `demos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 
 CREATE TABLE IF NOT EXISTS `reports` (
