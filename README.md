@@ -1,4 +1,4 @@
-# Server-Sys Reports & Auto Demo
+# Server-Sys Demos
 [![Build Status](https://travis-ci.org/whocodes/serversys-reports.svg?branch=master)](https://travis-ci.org/whocodes/serversys-reports)
 
 ## Compatibility
