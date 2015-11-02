@@ -4,14 +4,14 @@
 #include <smlib>
 
 #include <serversys>
-#include <serversys-reports>
+#include <serversys-demos>
 #include <system2>
 
 #pragma semicolon 1
 #pragma newdecls required
 
 public Plugin myinfo = {
-	name = "[Server-Sys] Reports System",
+	name = "[Server-Sys] Demos",
 	description = "Server-Sys reports and auto-demo implementation.",
 	author = "cam",
 	version = SERVERSYS_VERSION,
@@ -38,9 +38,9 @@ int  g_iListeningTarget[MAXPLAYERS + 1];
 int  g_iListeningTime[MAXPLAYERS + 1];
 
 void LoadConfig(){
-	Handle kv = CreateKeyValues("Reports");
+	Handle kv = CreateKeyValues("Demos");
 	char Config_Path[PLATFORM_MAX_PATH];
-	BuildPath(Path_SM, Config_Path, sizeof(Config_Path), "configs/serversys/reports.cfg");
+	BuildPath(Path_SM, Config_Path, sizeof(Config_Path), "configs/serversys/demos.cfg");
 
 	if(!(FileExists(Config_Path)) || !(FileToKeyValues(kv, Config_Path))){
 		Sys_KillHandle(kv);
@@ -66,7 +66,7 @@ void LoadConfig(){
 public void OnPluginStart(){
 	LoadConfig();
 
-	LoadTranslations("serversys.reports.phrases");
+	LoadTranslations("serversys.demos.phrases");
 
 	if(g_bLateLoad && Sys_InMap())
 		StartRecording();
@@ -107,8 +107,8 @@ public void OnClientPutInServer(int client){
 }
 
 void StartRecording(){
-	if(Sys_Reports_Recording())
-		SetFailState("[server-sys] reports :: ERROR! Cannot double record!");
+	if(Sys_Demos_Recording())
+		SetFailState("[server-sys] demos :: ERROR! Cannot double record!");
 
 	g_iRecording = GetTime();
 
@@ -118,12 +118,12 @@ void StartRecording(){
 }
 
 void StopRecording(){
-	if(!Sys_Reports_Recording())
-		SetFailState("[server-sys] reports :: ERROR! Attempting to stop unknown recording!");
+	if(!Sys_Demos_Recording())
+		SetFailState("[server-sys] demos :: ERROR! Attempting to stop unknown recording!");
 
 	ServerCommand("tv_stoprecord");
 
-	if(Sys_Reports_Ready()){
+	if(Sys_Demos_Ready()){
 		DataPack pack = new DataPack();
 		pack.WriteCell(g_iRecording);
 		pack.WriteCell(GetTime());
@@ -156,7 +156,7 @@ public Action FTPUpload_Timer(Handle timer, DataPack data){
 public void FTPUpload_Callback(bool finished, const char[] error, float dltotal, float dlnow, float uptotal, float upnow, DataPack data){
 	// System2 spams random errors, unknown
 	//if(strlen(error) > 1){
-	//	LogError("[server-sys] reports :: Error on FTP upload: %s", error);
+	//	LogError("[server-sys] demos :: Error on FTP upload: %s", error);
 	//	return;
 	//}else
 
@@ -170,21 +170,21 @@ public void FTPUpload_Callback(bool finished, const char[] error, float dltotal,
 		Format(query, sizeof(query), "INSERT INTO demos (sid, timestamp, timestamp_end, integrity) VALUES(%d, %d, %d, %.2f);", g_iServerID, recording, finish, ((upnow / uptotal)*100.0));
 
 
-		Sys_DB_TQuery(Sys_Reports_DemoInsertCB, query, data, DBPrio_High);
+		Sys_DB_TQuery(Sys_Demos_DemoInsertCB, query, data, DBPrio_High);
 	}
 }
 
-public void Sys_Reports_DemoInsertCB(Handle owner, Handle hndl, const char[] error, DataPack data){
+public void Sys_Demos_DemoInsertCB(Handle owner, Handle hndl, const char[] error, DataPack data){
 	int recording = data.ReadCell();
 	int finished = data.ReadCell();
 	CloseHandle(data);
 
 	if(hndl == INVALID_HANDLE){
-		LogError("[serversys] reports :: Error inserting demo (%d.dem, finished on %d) to database: %s", recording, finished, error);
+		LogError("[serversys] demos :: Error inserting demo (%d.dem, finished on %d) to database: %s", recording, finished, error);
 		return;
 	}
 
-	PrintToServer("[serversys] reports :: Demo uploading complete and inserted into table. %d to %d (%d.dem)", recording, finished, recording);
+	PrintToServer("[serversys] demos :: Demo uploading complete and inserted into table. %d to %d (%d.dem)", recording, finished, recording);
 }
 
 public void Command_ReportPlayer(int client, const char[] command, const char[] args){
@@ -203,14 +203,14 @@ public void Command_ReportPlayer(int client, const char[] command, const char[] 
 		}
 		menu.Display(client, 30);
 	}else{
-		PrintToChat(client, "%t", "No Players");
+		CPrintToChat(client, "%t", "No Players");
 	}
 }
 
 public int MenuHandler_ReportPlayer(Menu menu, MenuAction action, int client, int itemidx){
 	if(client <= 0 || !IsClientConnected(client)){
 		#if defined DEBUG
-		PrintToServer("[server-sys] reports :: Weird error in report menu.");
+		PrintToServer("[server-sys] demos :: Weird error in report menu.");
 		#endif
 		return;
 	}
@@ -230,9 +230,9 @@ public int MenuHandler_ReportPlayer(Menu menu, MenuAction action, int client, in
 			if(reportee != 0){
 				char name[32];
 				GetClientName(reportee, name, sizeof(name));
-				PrintToChat(client, "%t", "Type Reason Against", name);
+				CPrintToChat(client, "%t", "Type Reason Against", name);
 			}else{
-				PrintToChat(client, "%t", "Type Reason");
+				CPrintToChat(client, "%t", "Type Reason");
 			}
 		}
 	}
@@ -255,46 +255,46 @@ public Action OnClientSayCommand(int client, const char[] command, const char[] 
 			safedesc,
 			g_iRecording,
 			g_iListeningTime[client]);
-		Sys_DB_TQuery(Sys_Reports_ReportInsertCB, query, client);
+		Sys_DB_TQuery(Sys_Demos_ReportInsertCB, query, client);
 	}
 }
 
-public void Sys_Reports_ReportInsertCB(Handle owner, Handle hndl, const char[] error, int client){
+public void Sys_Demos_ReportInsertCB(Handle owner, Handle hndl, const char[] error, int client){
 	if(hndl == INVALID_HANDLE){
-		LogError("[serversys] reports :: Error inserting report from %N: %s", client, error);
+		LogError("[serversys] demos :: Error inserting report from %N: %s", client, error);
 		return;
 	}
 
-	PrintToChat(client, "%t", "Report Success", SQL_GetInsertId(hndl));
+	CPrintToChat(client, "%t", "Report Success", SQL_GetInsertId(hndl));
 }
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
 {
-	RegPluginLibrary("serversys-reports");
+	RegPluginLibrary("serversys-demos");
 
-	CreateNative("Sys_Reports_Ready", Native_Reports_Ready);
-	CreateNative("Sys_Reports_Recording", Native_Reports_Recording);
-	CreateNative("Sys_Reports_GetRecording", Native_Reports_GetRecording);
-	CreateNative("Sys_Reports_GetRecordingID", Native_Reports_GetRecording);
+	CreateNative("Sys_Demos_Ready", Native_Demos_Ready);
+	CreateNative("Sys_Demos_Recording", Native_Demos_Recording);
+	CreateNative("Sys_Demos_GetRecording", Native_Demos_GetRecording);
+	CreateNative("Sys_Demos_GetRecordingID", Native_Demos_GetRecording);
 
 
 	g_bLateLoad = late;
 }
 
-public int Native_Reports_GetRecording(Handle plugin, int numParams){
-	if(Sys_Reports_Recording() && g_iRecording != 0)
+public int Native_Demos_GetRecording(Handle plugin, int numParams){
+	if(Sys_Demos_Recording() && g_iRecording != 0)
 		return g_iRecording;
 
 	return 0;
 }
 
-public int Native_Reports_Ready(Handle plugin, int numParams){
+public int Native_Demos_Ready(Handle plugin, int numParams){
 	if(g_iServerID == 0)
 		return false;
 
 	return true;
 }
 
-public int Native_Reports_Recording(Handle plugin, int numParams){
+public int Native_Demos_Recording(Handle plugin, int numParams){
 	return g_bRecording;
 }

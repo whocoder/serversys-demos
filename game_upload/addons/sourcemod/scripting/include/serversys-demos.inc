@@ -1,7 +1,7 @@
-#if defined _serversys_reports_included
+#if defined _serversys_demos_included
   #endinput
 #endif
-#define _serversys_reports_included
+#define _serversys_demos_included
 
 /**
 * Checks if the reports plugin is currently ready
@@ -11,7 +11,7 @@
 *
 * @return               True if ready, false otherwise
 */
-native bool Sys_Reports_Ready();
+native bool Sys_Demos_Ready();
 
 /**
 * Checks if the reports plugin is currently recording
@@ -19,27 +19,27 @@ native bool Sys_Reports_Ready();
 *
 * @return               True if recording, false otherwise.
 */
-native bool Sys_Reports_Recording();
+native bool Sys_Demos_Recording();
 
 /**
 * Checks the current recording ID.
 *
 * @return               Current recording ID or 0.
 */
-native int Sys_Reports_GetRecording();
+native int Sys_Demos_GetRecording();
 
 /**
 * Checks the current recording ID.
 *
 * @return               Current recording ID or 0.
 */
-native int Sys_Reports_GetRecordingID();
+native int Sys_Demos_GetRecordingID();
 
 
-public SharedPlugin __pl_serversys_core =
+public SharedPlugin __pl_serversys_demos =
 {
-	name = "serversys-reports",
-	file = "serversys-reports.smx",
+	name = "serversys-demos",
+	file = "serversys-demos.smx",
 #if defined REQUIRE_PLUGIN
 	required = 1,
 #else
@@ -48,11 +48,11 @@ public SharedPlugin __pl_serversys_core =
 };
 
 #if defined REQUIRE_PLUGIN
-public __pl_serversys_reports_SetNTVOptional(){
-    MarkNativeAsOptional("Sys_Reports_Ready");
-    MarkNativeAsOptional("Sys_Reports_Recording");
-    MarkNativeAsOptional("Sys_Reports_GetRecording");
-    MarkNativeAsOptional("Sys_Reports_GetRecordingID");
+public __pl_serversys_demos_SetNTVOptional(){
+    MarkNativeAsOptional("Sys_Demos_Ready");
+    MarkNativeAsOptional("Sys_Demos_Recording");
+    MarkNativeAsOptional("Sys_Demos_GetRecording");
+    MarkNativeAsOptional("Sys_Demos_GetRecordingID");
 }
 #endif
 
