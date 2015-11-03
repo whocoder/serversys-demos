@@ -188,7 +188,7 @@ public void Sys_Demos_DemoInsertCB(Handle owner, Handle hndl, const char[] error
 }
 
 public void Command_ReportPlayer(int client, const char[] command, const char[] args){
-	if(Sys_PlayerCount(_, true) > 1){
+	if(Sys_GetPlayerCount(-2001, false, false, false) > 1){
 		Menu menu = new Menu(MenuHandler_ReportPlayer);
 		menu.SetTitle("%t", "Report Menu Header");
 		menu.ExitButton = true;
