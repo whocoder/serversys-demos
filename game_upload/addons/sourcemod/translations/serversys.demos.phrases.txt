@@ -12,18 +12,18 @@
 
 	"Type Reason"
 	{
-		"en"		"Type the reason for your report in chat. Minimum 15 characters."
+		"en"		"{DEFAULT}{LIME}Type the reason for your report in chat. Minimum 15 characters."
 	}
 
 	"Type Reason Against"
 	{
 		"#format"	"{1:s}"
-		"en"		"Type the reason for your report against {1} in chat. Minimum 15 characters."
+		"en"		"{DEFAULT}{LIME}Type the reason for your report against {RED}{1}{LIME} in chat. Minimum 15 characters."
 	}
 
 	"Report Success"
 	{
 		"#format"	"{1:i}"
-		"en"		"Your report has been successfully submitted. Your report ID is {1}."
+		"en"		"{DEFAULT}{LIME}Your report has been successfully submitted. Your report ID is {1}."
 	}
 }
