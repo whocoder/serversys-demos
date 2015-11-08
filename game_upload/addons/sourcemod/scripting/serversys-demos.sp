@@ -7,7 +7,7 @@
 #include <serversys-demos>
 
 #undef REQUIRE_EXTENSIONS
-#include <curl>
+#include <cURL>
 #define REQUIRE_EXTENSIONS
 
 #define CURL_LOADED() (GetFeatureStatus(FeatureType_Native, "curl_easy_init") == FeatureStatus_Available)
