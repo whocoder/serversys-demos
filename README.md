@@ -13,5 +13,5 @@
 
 ## Requirements
 * [Server-Sys](https://github.com/whocodes/serversys) and it's requirements
-* [System2](https://github.com/popoklopsi/System2) SourceMod extension
+* [cURL](https://github.com/whocodes/sourcemod-curl-extension) SourceMod extension
 * An FTP server (if automatic uploading is enabled)

@@ -3,9 +3,10 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 CREATE TABLE IF NOT EXISTS `demos` (
   `id` int(11) NOT NULL,
   `sid` int(11) NOT NULL,
+  `mid` int(11) NOT NULL,
   `timestamp` bigint(20) NOT NULL,
   `timestamp_end` bigint(20) NOT NULL,
-  `integrity` DECIMAL(4,2) NOT NULL
+  `upload_time` float NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `demos`
@@ -16,7 +17,8 @@ ALTER TABLE `demos`
 
 
 CREATE TABLE IF NOT EXISTS `reports` (
-  `reportid` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
+  `sid` int(11) NOT NULL,
   `reporter` int(11) NOT NULL,
   `reportee` int(11) NOT NULL,
   `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -25,10 +27,10 @@ CREATE TABLE IF NOT EXISTS `reports` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `reports`
-  ADD PRIMARY KEY (`reportid`);
+  ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `reports`
-  MODIFY `reportid` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

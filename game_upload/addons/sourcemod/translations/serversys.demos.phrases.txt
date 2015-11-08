@@ -1,18 +1,39 @@
 "Phrases"
 {
+	"Notify of upload start"
+	{
+		"en"		"> {PURPLE}Uploading game recording to the webserver! Server may experience a slight lag."
+	}
+
+	"Notify of upload end"
+	{
+		"#format"	"{1:.2f}"
+		"en"		"> {PURPLE}Finished uploading game recording! Took approximately {1} seconds."
+	}
+
 	"Report Menu Header"
 	{
 		"en"		"-------------\nPlease be sure there is a\nlegitimate reason first.\nThen, carefully select the player\nthat you wish to report.\n-------------"
 	}
 
+	"Error in report process"
+	{
+		"en"		"{DEFAULT}{DARKRED}There has been an error in the report process."
+	}
+
+	"Invalid report command usage"
+	{
+		"en"		"{DEFAULT}{DARKRED}Invalid report command usage! Usage: <{RED}!report{DARKRED} or {RED}/report{DARKRED}> [{RED}name{DARKRED} or blank for menu]"
+	}
+
 	"No Players"
 	{
-		"en"		"There are no players to report!"
+		"en"		"{DEFAULT}{DARKRED}There are no players to report!"
 	}
 
 	"Type Reason"
 	{
-		"en"		"{DEFAULT}{LIME}Type the reason for your report in chat. Minimum 15 characters."
+		"en"		"{DEFAULT}{LIME}Type the reason for your report in chat. Minimum 15 characters. Type {GREEN}abort{LIME} or {GREEN}cancel{LIME} to abort."
 	}
 
 	"Type Reason Against"
@@ -24,6 +45,6 @@
 	"Report Success"
 	{
 		"#format"	"{1:i}"
-		"en"		"{DEFAULT}{LIME}Your report has been successfully submitted. Your report ID is {1}."
+		"en"		"{DEFAULT}{LIME}Your report has been successfully submitted. Report ID #{1}. The report cannot be reviewed until the next map change."
 	}
 }

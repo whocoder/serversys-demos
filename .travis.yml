@@ -30,7 +30,8 @@ install:
   - chmod -R 777 smlib-master
   - cp -rv smlib-master/. .
   - cd scripting/include
-  - wget https://forums.alliedmods.net/attachment.php?attachmentid=119072 -O system2.inc
+  - wget https://raw.githubusercontent.com/whocodes/sourcemod-curl-extension/master/cURL.inc -O cURL.inc
+  - wget https://raw.githubusercontent.com/whocodes/sourcemod-curl-extension/master/cURL_header.inc -O cURL_header.inc
   - cd ../../../../../
   - find build-env/addons/sourcemod/scripting/ -name "*.sp" -type f -delete
   - cp -rv $SCRIPTING/. build-env/addons/sourcemod/scripting/
