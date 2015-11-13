@@ -54,12 +54,16 @@ ConVar cv_Enable;
 ConVar cv_Record;
 ConVar cv_Delay;
 ConVar cv_Name;
+ConVar cv_TransmitAll;
+ConVar cv_AllowCameraMan;
 
 public void OnPluginStart(){
 	cv_Name = FindConVar("tv_name");
 	cv_Enable = FindConVar("tv_enable");
 	cv_Record = FindConVar("tv_autorecord");
 	cv_Delay = FindConVar("tv_delay");
+	cv_TransmitAll = FindConVar("tv_transmitall");
+	cv_AllowCameraMan = FindConVar("tv_allow_camera_man");
 
 	LoadConfig();
 
@@ -70,6 +74,8 @@ public void OnPluginStart(){
 
 	cv_Enable.BoolValue = true;
 	cv_Record.BoolValue = false;
+	cv_TransmitAll.BoolValue = true;
+	cv_AllowCameraMan.BoolValue = false;
 
 	cv_Enable.AddChangeHook(Hook_ConVarChange);
 	cv_Record.AddChangeHook(Hook_ConVarChange);
@@ -198,6 +204,8 @@ void StartRecording(){
 
 	g_iRecording = GetTime();
 
+	cv_TransmitAll.BoolValue = true;
+	cv_AllowCameraMan.BoolValue = false;
 	ServerCommand("tv_record %s/%d.dem", g_Settings_LocalPath, g_iRecording);
 
 	g_bRecording = true;
