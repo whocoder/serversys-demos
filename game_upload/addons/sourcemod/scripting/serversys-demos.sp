@@ -226,7 +226,7 @@ void StopRecording(){
 		pack.WriteCell(g_iRecording);
 		pack.WriteCell(GetTime());
 		pack.WriteCell(Sys_GetMapID());
-		pack.WriteFloat((GetEngineTime() - 10.0));
+		pack.WriteFloat((GetEngineTime() + 10.0));
 		CreateTimer(10.0, FTPUpload_Timer, pack);
 	}else{
 		LogMessage("[serversys] demos :: Finished recording %d.dem", g_iRecording);
