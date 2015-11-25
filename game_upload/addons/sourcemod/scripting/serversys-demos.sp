@@ -75,7 +75,9 @@ public void OnPluginStart(){
 	cv_Enable.BoolValue = true;
 	cv_Record.BoolValue = false;
 	cv_TransmitAll.BoolValue = true;
-	cv_AllowCameraMan.BoolValue = false;
+	// This one isn't in CS:GO
+	if(cv_AllowCameraMan != INVALID_HANDLE)
+		cv_AllowCameraMan.BoolValue = false;
 
 	cv_Enable.AddChangeHook(Hook_ConVarChange);
 	cv_Record.AddChangeHook(Hook_ConVarChange);
@@ -205,7 +207,9 @@ void StartRecording(){
 	g_iRecording = GetTime();
 
 	cv_TransmitAll.BoolValue = true;
-	cv_AllowCameraMan.BoolValue = false;
+	if(cv_AllowCameraMan != INVALID_HANDLE)
+		cv_AllowCameraMan.BoolValue = false;
+
 	ServerCommand("tv_record %s/%d.dem", g_Settings_LocalPath, g_iRecording);
 
 	g_bRecording = true;
