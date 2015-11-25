@@ -1,8 +1,8 @@
 # Server-Sys Demos
-[![Build Status](https://travis-ci.org/whocodes/serversys-reports.svg?branch=master)](https://travis-ci.org/whocodes/serversys-reports)
+[![Build Status](https://travis-ci.org/whocodes/serversys-demos.svg?branch=master)](https://travis-ci.org/whocodes/serversys-demos)
 
 ## Compatibility
-* Any SourceTV-enabled game.
+* Any SourceTV enabled game
 
 ## Features
 * Automatically records all gameplay using SourceTV.
