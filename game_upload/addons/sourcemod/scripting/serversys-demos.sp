@@ -166,7 +166,7 @@ public void OnClientPutInServer(int client){
 }
 
 public void OnClientDisconnect_Post(int client){
-	if(Sys_Demos_Recording() && (Sys_GetPlayerCount(-2001, true) < 2))
+	if(Sys_Demos_Recording() && (Sys_GetPlayerCount() < 1))
 		StopRecording();
 }
 
