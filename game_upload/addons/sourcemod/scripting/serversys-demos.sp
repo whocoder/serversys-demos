@@ -55,7 +55,7 @@ ConVar cv_Record;
 ConVar cv_Delay;
 ConVar cv_Name;
 ConVar cv_TransmitAll;
-ConVar cv_AllowCameraMan;
+ConVar cv_AllowCameraMan = INVALID_HANDLE;
 
 public void OnPluginStart(){
 	cv_Name = FindConVar("tv_name");
